@@ -11,12 +11,14 @@ describe("InMemoryPatientRepository", () => {
     patient = new Patient(
       "123",
       "João Silva",
+      "933.444.130-58",
       "1199999999",
       new Date("2000-01-01"),
     );
     patient2 = new Patient(
       "124",
       "Maria Silva",
+      "933.444.130-58",
       "1199999999",
       new Date("2000-01-01"),
     );
@@ -36,6 +38,7 @@ describe("InMemoryPatientRepository", () => {
     const updatedPatient = new Patient(
       "123",
       "Marcelo",
+      "933.444.130-58",
       "1199999999",
       new Date("2000-01-01"),
     );

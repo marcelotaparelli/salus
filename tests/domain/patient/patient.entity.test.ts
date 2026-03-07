@@ -5,12 +5,14 @@ describe("Patient", () => {
     const patient = new Patient(
       "123",
       "João Silva",
+      "933.444.130-58",
       "1199999999",
       new Date("2000-01-01"),
     );
 
     expect(patient.id).toBe("123");
     expect(patient.name).toBe("João Silva");
+    expect(patient.cpf).toBe("933.444.130-58");
     expect(patient.phone).toBe("1199999999");
     expect(patient.birthDate).toEqual(new Date("2000-01-01"));
   });

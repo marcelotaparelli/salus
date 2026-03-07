@@ -1,21 +1,20 @@
 import { Patient } from "@domain/patient/patient.entity";
-import { CreatePatientInput } from "@application/patient/patient.types";
+import { CreatePatientDTO } from "@application/patient/create-patient.dto";
 import { PatientRepository } from "@domain/patient/patient.repository";
 
 export class CreatePatientUseCase {
   constructor(private patientRepository: PatientRepository) {}
 
-  async execute(input: CreatePatientInput): Promise<Patient> {
-    const uuid = crypto.randomUUID();
-    const patientInput = new Patient(
-      uuid,
+  async execute(input: CreatePatientDTO): Promise<Patient> {
+    const patient = Patient.create(
       input.name,
+      input.cpf,
       input.phone,
       input.birthDate,
     );
 
-    this.patientRepository.save(patientInput);
+    await this.patientRepository.save(patient);
 
-    return patientInput;
+    return patient;
   }
 }

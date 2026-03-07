@@ -13,6 +13,7 @@ describe("CreatePatientUseCase", () => {
   it("Deve retornar um paciente com id", async () => {
     const rawPatientData = {
       name: "João Silva",
+      cpf: "933.444.130-58",
       phone: "1199999999",
       birthDate: new Date("2020-01-01"),
     };
