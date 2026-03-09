@@ -17,9 +17,7 @@ describe("CreatePatientUseCase", () => {
       phone: "1199999999",
       birthDate: new Date("2020-01-01"),
     };
-
     const result = await useCase.execute(rawPatientData);
-
     expect(result.id).toBeDefined();
   });
 });
