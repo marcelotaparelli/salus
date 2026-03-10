@@ -7,7 +7,12 @@ export class PatientController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const response = await this.useCases.createUseCase.execute(req.body);
+      const response = await this.useCases.createUseCase.execute({
+        name: req.body.name,
+        cpf: req.body.cpf,
+        phone: req.body.phone,
+        birthDate: new Date(req.body.birthDate),
+      });
       res.status(201).json(response);
     } catch (error) {
       console.log(error);
