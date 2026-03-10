@@ -1,13 +1,27 @@
 import request from "supertest";
 import { app } from "@infra/http/server";
+import { prisma } from "@infra/database/prisma/client";
 
-describe("Rotas", () => {
+const TEST_CPF = "933.444.130-58";
+
+let createdPatientId: string;
+
+beforeAll(async () => {
+  await prisma.patient.deleteMany({ where: { cpf: TEST_CPF } });
+});
+
+afterAll(async () => {
+  await prisma.patient.deleteMany({ where: { cpf: TEST_CPF } });
+  await prisma.$disconnect();
+});
+
+describe("Patient Routes", () => {
   it("POST /patients deve criar um paciente e retornar 201", async () => {
     const response = await request(app)
       .post("/patients")
       .send({
         name: "José Silva",
-        cpf: "933.444.130-58",
+        cpf: TEST_CPF,
         phone: "1199999999",
         birthDate: "2000-01-01",
       })
@@ -16,35 +30,34 @@ describe("Rotas", () => {
     expect(response.status).toBe(201);
     expect(response.body.id).toBeDefined();
     expect(response.body.name).toBe("José Silva");
+
+    createdPatientId = response.body.id;
   });
 
-  it("GET /patients deve retornar todos os pacientes ou array vazio", async () => {
+  it("GET /patients deve retornar array com ao menos um paciente", async () => {
     const response = await request(app).get("/patients");
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Array);
+    expect(response.body.length).toBeGreaterThanOrEqual(1);
   });
 
-  it("GET /patients/:id deve retornar um paciente específico", async () => {
-    const patients = await request(app).get("/patients");
-    const id = patients.body[0].id;
-    const response = await request(app).get(`/patients/${id}`);
+  it("GET /patients/:id deve retornar o paciente criado", async () => {
+    const response = await request(app).get(`/patients/${createdPatientId}`);
     expect(response.status).toBe(200);
     expect(response.body.name).toBe("José Silva");
   });
 
-  it("GET /patients:id deve retornar 404 quando não achar paciente específico", async () => {
+  it("GET /patients/:id deve retornar 404 para id inexistente", async () => {
     const response = await request(app).get("/patients/id-inexistente");
     expect(response.status).toBe(404);
   });
 
-  it("PUT /patients/:id deve retornar 200 atualizar um paciente", async () => {
-    const patients = await request(app).get("/patients");
-    const id = patients.body[0].id;
+  it("PUT /patients/:id deve atualizar e retornar 200", async () => {
     const response = await request(app)
-      .put(`/patients/${id}`)
+      .put(`/patients/${createdPatientId}`)
       .send({
         name: "Marcelo Silva",
-        cpf: "933.444.130-58",
+        cpf: TEST_CPF,
         phone: "1199999999",
         birthDate: "2000-01-01",
       })
@@ -53,12 +66,12 @@ describe("Rotas", () => {
     expect(response.status).toBe(200);
   });
 
-  it("PUT /patients:id deve retornar 404 quando não achar paciente específico", async () => {
+  it("PUT /patients/:id deve retornar 404 para id inexistente", async () => {
     const response = await request(app)
       .put("/patients/id-inexistente")
       .send({
         name: "Marcelo Silva",
-        cpf: "933.444.130-58",
+        cpf: TEST_CPF,
         phone: "1199999999",
         birthDate: "2000-01-01",
       })
@@ -67,17 +80,13 @@ describe("Rotas", () => {
     expect(response.status).toBe(404);
   });
 
-  it("DELETE /patients/:id deve retornar 200 ao deletar um paciente", async () => {
-    const patients = await request(app).get("/patients");
-    const id = patients.body[0].id;
-    const response = await request(app).delete(`/patients/${id}`);
-
+  it("DELETE /patients/:id deve retornar 200 ao deletar", async () => {
+    const response = await request(app).delete(`/patients/${createdPatientId}`);
     expect(response.status).toBe(200);
   });
 
-  it("DELETE /patients/:id deve retornar 404 quando não encontrar paciente", async () => {
-    const reponse = await request(app).delete("/patients/id-inexistente");
-
-    expect(reponse.status).toBe(404);
+  it("DELETE /patients/:id deve retornar 404 para id inexistente", async () => {
+    const response = await request(app).delete("/patients/id-inexistente");
+    expect(response.status).toBe(404);
   });
 });
