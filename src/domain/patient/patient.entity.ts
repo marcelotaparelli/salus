@@ -7,6 +7,7 @@ export class Patient {
     public readonly cpf: string,
     public readonly phone: string,
     public readonly birthDate: Date,
+    public readonly createdAt?: Date,
   ) {
     this.id = id ?? crypto.randomUUID();
     this.validate();
