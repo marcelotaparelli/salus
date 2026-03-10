@@ -10,6 +10,7 @@ export class PatientController {
       const response = await this.useCases.createUseCase.execute(req.body);
       res.status(201).json(response);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
