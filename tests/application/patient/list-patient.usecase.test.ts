@@ -1,6 +1,6 @@
 import { ListPatientsUseCase } from "@application/patient/list-patients.usecase";
 import { CreatePatientUseCase } from "@application/patient/create-patient.usecase";
-import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient.repository";
+import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient/patient.repository";
 import { Patient } from "@domain/patient/patient.entity";
 
 describe("ListPatientsUseCase", () => {

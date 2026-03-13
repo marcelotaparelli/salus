@@ -15,7 +15,6 @@ export class PatientController {
       });
       res.status(201).json(response);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

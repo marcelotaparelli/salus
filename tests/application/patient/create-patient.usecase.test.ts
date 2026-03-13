@@ -1,5 +1,5 @@
 import { CreatePatientUseCase } from "@application/patient/create-patient.usecase";
-import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient.repository";
+import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient/patient.repository";
 
 describe("CreatePatientUseCase", () => {
   let repo: InMemoryPatientRepository;

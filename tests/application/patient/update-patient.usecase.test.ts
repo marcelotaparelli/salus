@@ -1,5 +1,5 @@
 import { Patient } from "@domain/patient/patient.entity";
-import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient.repository";
+import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient/patient.repository";
 import { UpdatePatientUseCase } from "@application/patient/update-patient.usecase";
 
 describe("UpdatePatientUseCase", () => {
