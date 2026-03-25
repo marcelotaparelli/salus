@@ -14,7 +14,8 @@ export default defineConfig({
     alias: {
       "@domain": "./src/domain",
       "@application": "./src/application",
-      "@infra": "./src/infra",
+      "@infra": "./src/infrastructure",
+      "@presentation": "./src/presentation",
       "@config": "./src/config",
       "@shared": "./src/shared",
     },

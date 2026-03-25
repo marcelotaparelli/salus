@@ -1,4 +1,4 @@
-import { User } from "@domain/user/user.entity";
+import { User } from "@domain/user/entities/user.entity";
 import { AppError } from "@shared/errors/app-error";
 
 describe("User entity", () => {

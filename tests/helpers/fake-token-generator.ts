@@ -1,4 +1,4 @@
-import { TokenGenerator } from "@domain/auth/token-generator";
+import { TokenGenerator } from "@domain/auth/services/token-generator";
 
 export class FakeTokenGenerator implements TokenGenerator {
   generate(): string {

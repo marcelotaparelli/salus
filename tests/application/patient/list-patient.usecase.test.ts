@@ -1,7 +1,11 @@
-import { ListPatientsUseCase } from "@application/patient/list-patients.usecase";
-import { CreatePatientUseCase } from "@application/patient/create-patient.usecase";
-import { InMemoryPatientRepository } from "../../infra/database/in-memory/patient/patient.repository";
-import { Patient } from "@domain/patient/patient.entity";
+import { ListPatientsUseCase } from "@application/patient/list/list-patients.usecase";
+import { CreatePatientUseCase } from "@application/patient/create/create-patient.usecase";
+import { InMemoryPatientRepository } from "../../infrastructure/database/in-memory/patient/patient.repository";
+import { Patient } from "@domain/patient/entities/patient.entity";
+import { Name } from "@domain/value-objects/name.vo";
+import { Cpf } from "@domain/value-objects/cpf.vo";
+import { Phone } from "@domain/value-objects/phone.vo";
+import { BirthDate } from "@domain/value-objects/birth-date.vo";
 
 describe("ListPatientsUseCase", () => {
   let repo: InMemoryPatientRepository;
@@ -16,10 +20,10 @@ describe("ListPatientsUseCase", () => {
 
   it("Deve listar todos os pacientes", async () => {
     const patient = Patient.create(
-      "João Silva",
-      "933.444.130-58",
-      "1199999999",
-      new Date("2000-01-01"),
+      new Name("João Silva"),
+      new Cpf("529.982.247-25"),
+      new Phone("(11) 99659-2439"),
+      new BirthDate(new Date("2000-01-01")),
     );
     await createUseCase.execute(patient);
     const patientList = await listUseCase.execute();

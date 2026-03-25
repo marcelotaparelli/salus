@@ -1,10 +1,10 @@
-import { LoginUserUseCase } from "@application/auth/login-user.usecase";
-import { UserRepository } from "@domain/user/user.repository";
-import { InMemoryUserRepository } from "../../infra/database/in-memory/user/user.repository";
-import { PasswordHasher } from "@domain/auth/password-hasher";
+import { LoginUserUseCase } from "@application/auth/login/login-user.usecase";
+import { UserRepository } from "@domain/user/repositories/user.repository";
+import { InMemoryUserRepository } from "../../infrastructure/database/in-memory/user/user.repository";
+import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { FakePasswordHasher } from "../../helpers/fake-password-hasher";
 import { AppError } from "@shared/errors/app-error";
-import { User } from "@domain/user/user.entity";
+import { User } from "@domain/user/entities/user.entity";
 import { FakeTokenGenerator } from "../../helpers/fake-token-generator";
 
 describe("LoginUserUseCase", () => {

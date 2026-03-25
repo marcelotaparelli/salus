@@ -1,8 +1,8 @@
-import { UserRepository } from "@domain/user/user.repository";
-import { InMemoryUserRepository } from "../../infra/database/in-memory/user/user.repository";
+import { UserRepository } from "@domain/user/repositories/user.repository";
+import { InMemoryUserRepository } from "../../infrastructure/database/in-memory/user/user.repository";
 import { AppError } from "@shared/errors/app-error";
-import { RegisterUserUseCase } from "@application/auth/register-user.usecase";
-import { PasswordHasher } from "@domain/auth/password-hasher";
+import { RegisterUserUseCase } from "@application/auth/register/register-user.usecase";
+import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { FakePasswordHasher } from "../../helpers/fake-password-hasher";
 
 describe("RegisterUserUseCase", () => {
