@@ -1,89 +1,51 @@
-import { Cpf } from "../../value-objects/cpf.vo";
-import { Phone } from "../../value-objects/phone.vo";
-import { Name } from "../../value-objects/name.vo";
-import { BirthDate } from "../../value-objects/birth-date.vo";
+import { Name, Cpf, Phone, BirthDate } from "@domain/value-objects";
+import { PatientProps, CreatePatientInput } from "@domain/patient/types";
+import { PatientMissingRequiredInformationError } from "@domain/patient/errors/patient-missing-required-information.error";
 
 export class Patient {
-  constructor(
-    public readonly id: string,
-    public readonly name: Name,
-    public readonly cpf: Cpf,
-    public readonly phone: Phone,
-    public readonly birthDate: BirthDate,
-    public readonly createdAt: Date = new Date(),
-  ) {}
+  private constructor(private props: PatientProps) {}
 
-  public static create(
-    name: Name,
-    cpf: Cpf,
-    phone: Phone,
-    birthDate: BirthDate,
-  ): Patient {
-    return new Patient(crypto.randomUUID(), name, cpf, phone, birthDate);
+  public static create(input: CreatePatientInput): Patient {
+    const missingFields: string[] = [];
+    if (!input.name) missingFields.push("name");
+    if (!input.cpf) missingFields.push("cpf");
+    if (!input.phone) missingFields.push("phone");
+    if (!input.birthDate) missingFields.push("birthDate");
+
+    if (missingFields.length > 0) {
+      throw new PatientMissingRequiredInformationError(missingFields);
+    }
+
+    return new Patient({
+      id: crypto.randomUUID(),
+      name: new Name(input.name),
+      cpf: new Cpf(input.cpf),
+      phone: new Phone(input.phone),
+      birthDate: new BirthDate(input.birthDate),
+      createdAt: new Date(),
+    });
+  }
+
+  public static reconstitute(props: PatientProps): Patient {
+    return new Patient(props);
+  }
+
+  get id() {
+    return this.props.id;
+  }
+  get name() {
+    return this.props.name;
+  }
+  get cpf() {
+    return this.props.cpf;
+  }
+  get phone() {
+    return this.props.phone;
+  }
+  get birthDate() {
+    return this.props.birthDate;
+  }
+  get createdAt() {
+    return this.props.createdAt;
   }
 }
-
-/*
-
-export class Patient {
-  public readonly id: string;
-
-  constructor(
-    id: string,
-    public readonly name: string,
-    public readonly cpf: string,
-    public readonly phone: string,
-    public readonly birthDate: Date,
-    public readonly createdAt?: Date,
-  ) {
-    this.id = id ?? crypto.randomUUID();
-    this.validate();
-  }
-
-  private validate(): void {
-    if (!this.name || this.name.trim().length < 2) {
-      throw new Error("Nome inválido");
-    }
-
-    if (!this.isValidCpf(this.cpf)) {
-      throw new Error("CPF inválido");
-    }
-
-    if (!this.phone || !/^\d+$/.test(this.phone) || this.phone.trim().length < 11) {
-      throw new Error("Telefone inválido");
-    }
-
-    if (this.birthDate > new Date()) {
-      throw new Error("Data de nascimento não pode ser futura");
-    }
-  }
-
-  private isValidCpf(cpf: string): boolean {
-    const cleaned = cpf.replace(/\D/g, "");
-
-    if (cleaned.length !== 11) return false;
-    if (/^(\d)\1+$/.test(cleaned)) return false;
-
-    const calc = (mod: number) =>
-      cleaned
-        .slice(0, mod - 1)
-        .split("")
-        .reduce((sum, d, i) => sum + Number(d) * (mod - i), 0);
-
-    const d1 = ((calc(10) * 10) % 11) % 10;
-    const d2 = ((calc(11) * 10) % 11) % 10;
-
-    return d1 === Number(cleaned[9]) && d2 === Number(cleaned[10]);
-  }
-
-  static create(
-    name: string,
-    cpf: string,
-    phone: string,
-    birthDate: Date,
-  ): Patient {
-    return new Patient(crypto.randomUUID(), name, cpf, phone, birthDate);
-  }
-}
-
-*/
