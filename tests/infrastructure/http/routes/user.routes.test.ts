@@ -21,7 +21,6 @@ describe("UserRoutes", () => {
         password: "password",
       })
       .set("Accept", "application/json");
-    console.log(response.status, response.text);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.status).toEqual(201);
     expect(response.body.id).toBeDefined();

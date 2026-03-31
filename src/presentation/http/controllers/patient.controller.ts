@@ -12,10 +12,10 @@ export class PatientController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await this.useCases.createUseCase.execute({
-        name: new Name(req.body.name),
-        cpf: new Cpf(req.body.cpf),
-        phone: new Phone(req.body.phone),
-        birthDate: new BirthDate(new Date(req.body.birthDate)),
+        name: req.body.name,
+        cpf: req.body.cpf,
+        phone: req.body.phone,
+        birthDate: new Date(req.body.birthDate),
       });
       res.status(201).json(response);
     } catch (error) {
@@ -50,13 +50,20 @@ export class PatientController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params["id"] as string;
-      const updatedPatient = new Patient(
-        id,
-        new Name(req.body.name),
-        new Cpf(req.body.cpf),
-        new Phone(req.body.phone),
-        new BirthDate(new Date(req.body.birthDate)),
-      );
+
+      const existing = await this.useCases.getUseCase.execute(id);
+      if (!existing)
+        return res.status(404).json({ message: "Paciente não encontrado" });
+
+      const updatedPatient = Patient.reconstitute({
+        id: id,
+        name: new Name(req.body.name),
+        cpf: new Cpf(existing.cpf),
+        phone: new Phone(req.body.phone),
+        birthDate: new BirthDate(new Date(req.body.birthDate)),
+        createdAt: new Date(existing.createdAt),
+      });
+
       const response =
         await this.useCases.updateUseCase.execute(updatedPatient);
       res.status(200).json(response);
@@ -75,7 +82,7 @@ export class PatientController {
       res.status(200).json({ message: "Paciente removido com sucesso" });
     } catch (error) {
       if (error instanceof Error && error.message === "Paciente não encontrado")
-        throw res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message }); // return, not throw
       console.error("Erro em PatientController.delete:", error);
       next(error);
     }

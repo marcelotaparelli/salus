@@ -8,16 +8,9 @@ import { BirthDate } from "@domain/value-objects/birth-date.vo";
 
 export class PrismaPatientRepository implements PatientRepository {
   async save(patient: Patient): Promise<void> {
-    await prisma.patient.upsert({
-      where: { id: patient.id },
-      create: {
+    await prisma.patient.create({
+      data: {
         id: patient.id,
-        name: patient.name.value,
-        cpf: patient.cpf.value,
-        phone: patient.phone.value,
-        birthDate: patient.birthDate.value,
-      },
-      update: {
         name: patient.name.value,
         cpf: patient.cpf.value,
         phone: patient.phone.value,
@@ -28,16 +21,15 @@ export class PrismaPatientRepository implements PatientRepository {
 
   async findAll(): Promise<Patient[]> {
     const result = await prisma.patient.findMany();
-    return result.map(
-      (p) =>
-        new Patient(
-          p.id,
-          new Name(p.name),
-          new Cpf(p.cpf),
-          new Phone(p.phone),
-          new BirthDate(p.birthDate),
-          p.createdAt,
-        ),
+    return result.map((p) =>
+      Patient.reconstitute({
+        id: p.id,
+        name: new Name(p.name),
+        cpf: new Cpf(p.cpf),
+        phone: new Phone(p.phone),
+        birthDate: new BirthDate(p.birthDate),
+        createdAt: p.createdAt,
+      }),
     );
   }
 
@@ -46,14 +38,25 @@ export class PrismaPatientRepository implements PatientRepository {
       where: { id: id },
     });
     if (!result) return null;
-    return new Patient(
-      result.id,
-      new Name(result.name),
-      new Cpf(result.cpf),
-      new Phone(result.phone),
-      new BirthDate(result.birthDate),
-      result.createdAt,
-    );
+    return Patient.reconstitute({
+      id: result.id,
+      name: new Name(result.name),
+      cpf: new Cpf(result.cpf),
+      phone: new Phone(result.phone),
+      birthDate: new BirthDate(result.birthDate),
+      createdAt: result.createdAt,
+    });
+  }
+
+  async update(patient: Patient): Promise<void> {
+    await prisma.patient.update({
+      where: { id: patient.id },
+      data: {
+        name: patient.name.value,
+        phone: patient.phone.value,
+        birthDate: patient.birthDate.value,
+      },
+    });
   }
 
   async delete(id: string): Promise<void> {

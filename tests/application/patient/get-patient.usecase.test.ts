@@ -1,10 +1,6 @@
 import { InMemoryPatientRepository } from "../../infrastructure/database/in-memory/patient/patient.repository";
 import { Patient } from "@domain/patient/entities/patient.entity";
 import { GetPatientUseCase } from "@application/patient/get/get-patient.usecase";
-import { Name } from "@domain/value-objects/name.vo";
-import { Cpf } from "@domain/value-objects/cpf.vo";
-import { Phone } from "@domain/value-objects/phone.vo";
-import { BirthDate } from "@domain/value-objects/birth-date.vo";
 
 describe("GetPatientUseCase", () => {
   let repo: InMemoryPatientRepository;
@@ -14,12 +10,12 @@ describe("GetPatientUseCase", () => {
   beforeEach(() => {
     repo = new InMemoryPatientRepository();
     getUseCase = new GetPatientUseCase(repo);
-    patient = Patient.create(
-      new Name("João Silva"),
-      new Cpf("933.444.130-58"),
-      new Phone("(11) 99659-2439"),
-      new BirthDate(new Date("2000-01-01")),
-    );
+    patient = Patient.create({
+      name: "João Silva",
+      cpf: "933.444.130-58",
+      phone: "(11) 99659-2439",
+      birthDate: new Date("2000-01-01"),
+    });
   });
 
   it("Deve retornar null quando paciente não existe", async () => {
@@ -29,7 +25,14 @@ describe("GetPatientUseCase", () => {
 
   it("Deve retornar um paciente", async () => {
     await repo.save(patient);
-    const foundPatient = await getUseCase.execute(patient.id);
-    expect(foundPatient).toStrictEqual(patient);
+    const result = await getUseCase.execute(patient.id);
+
+    expect(result).not.toBeNull();
+    expect(result?.id).toBeDefined();
+    expect(result?.createdAt).toBeInstanceOf(Date);
+    expect(result?.name).toBe("João Silva");
+    expect(result?.cpf).toBe("933.444.130-58");
+    expect(result?.phone).toBe("(11) 99659-2439");
+    expect(result?.birthDate).toEqual(new Date("2000-01-01"));
   });
 });

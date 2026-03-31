@@ -1,12 +1,13 @@
 import { PatientRepository } from "@domain/patient/repositories/patient.repository";
-import { Patient } from "@domain/patient/entities/patient.entity";
+import { PatientMapper } from "@application/patient/shared/mappers/patient-response.mapper";
+import { PatientResponseDTO } from "@application/patient/shared/dtos/patient-response.dto";
 
 export class GetPatientUseCase {
   constructor(private patientRepository: PatientRepository) {}
 
-  async execute(id: string): Promise<Patient | null> {
+  async execute(id: string): Promise<PatientResponseDTO | null> {
     const patient = await this.patientRepository.findById(id);
-
-    return patient;
+    if (!patient) return null;
+    return PatientMapper.toResponse(patient);
   }
 }

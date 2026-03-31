@@ -9,6 +9,6 @@ export class UpdatePatientUseCase {
 
     if (!foundPatient) throw new Error("Paciente não encontrado");
 
-    await this.patientRepository.save(patient);
+    await this.patientRepository.update(patient);
   }
 }

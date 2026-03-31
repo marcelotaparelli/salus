@@ -30,7 +30,7 @@ export class InMemoryPatientRepository implements PatientRepository {
     const index = this.repo.findIndex((p) => p.id === data.id);
 
     if (index === -1) this.repo.push(data);
-    else this.repo.splice(index, 1, data);
+    else throw new Error("Paciente já existe");
   }
 
   public async findAll(): Promise<Patient[]> {
@@ -42,18 +42,31 @@ export class InMemoryPatientRepository implements PatientRepository {
     return p ? this.toDomain(p) : null;
   }
 
+  public async update(patient: Patient): Promise<void> {
+    const index = this.repo.findIndex((p) => p.id === patient.id);
+    if (index === -1) throw new Error("Paciente não encontrado");
+    this.repo.splice(index, 1, {
+      id: patient.id,
+      name: patient.name.value,
+      phone: patient.phone.value,
+      cpf: patient.cpf.value,
+      birthDate: patient.birthDate.value,
+      createdAt: patient.createdAt,
+    });
+  }
+
   public async delete(id: string): Promise<void> {
     this.repo = this.repo.filter((p) => p.id !== id);
   }
 
   private toDomain(p: PatientRow): Patient {
-    return new Patient(
-      p.id,
-      new Name(p.name),
-      new Cpf(p.cpf),
-      new Phone(p.phone),
-      new BirthDate(p.birthDate),
-      p.createdAt,
-    );
+    return Patient.reconstitute({
+      id: p.id,
+      name: new Name(p.name),
+      cpf: new Cpf(p.cpf),
+      phone: new Phone(p.phone),
+      birthDate: new BirthDate(p.birthDate),
+      createdAt: p.createdAt,
+    });
   }
 }

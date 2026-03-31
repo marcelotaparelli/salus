@@ -7,5 +7,7 @@ export interface PatientRepository {
 
   findById(id: string): Promise<Patient | null>;
 
+  update(patient: Patient): Promise<void>;
+
   delete(id: string): Promise<void>;
 }
