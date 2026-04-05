@@ -3,7 +3,6 @@ import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { RegisterUserDTO } from "./register-user.dto";
 import { RegisterUserResponseDTO } from "./register-user-response.dto";
 import { User } from "@domain/user/entities/user.entity";
-import { AppError } from "@shared/errors/app-error";
 import { randomUUID } from "crypto";
 
 export class RegisterUserUseCase {
@@ -16,7 +15,7 @@ export class RegisterUserUseCase {
     const userExists = await this.userRepository.findByEmail(user.email);
 
     if (userExists) {
-      throw new AppError("Email already in use", 409);
+      throw new Error("Email already in use");
     }
 
     const hashedPassword = await this.hasher.hash(user.password);

@@ -1,0 +1,6 @@
+export enum DomainErrorCategory {
+  VALIDATION = "VALIDATION",
+  BUSINESS_RULE = "BUSINESS_RULE",
+  CONFLICT = "CONFLICT",
+  NOT_FOUND = "NOT_FOUND",
+}

@@ -1,4 +1,4 @@
-import { DomainErrorCategory } from "@domain/shared/errors/domain-error-category.type";
+import { DomainErrorCategory } from "@domain/shared/errors/domain-error-category.enum";
 
 const httpStatusMap: Record<DomainErrorCategory, number> = {
   VALIDATION: 400,

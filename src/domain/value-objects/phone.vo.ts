@@ -1,3 +1,5 @@
+import { InvalidPhoneError } from "@domain/value-objects/errors/invalid-phone.error";
+
 export class Phone {
   public readonly value: string;
 
@@ -5,7 +7,7 @@ export class Phone {
     const cleaned = phone.replace(/\D/g, "");
 
     if (!Phone.isValid(cleaned)) {
-      throw new Error("Celular inválido. O formato deve ser (DDD) 9XXXX-XXXX");
+      throw new InvalidPhoneError();
     }
 
     this.value = cleaned;

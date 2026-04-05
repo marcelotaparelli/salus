@@ -1,5 +1,4 @@
 import { User } from "@domain/user/entities/user.entity";
-import { AppError } from "@shared/errors/app-error";
 
 describe("User entity", () => {
   it("deve criar um usuário válido", () => {
@@ -24,12 +23,12 @@ describe("User entity", () => {
   it("deve lançar AppError se o nome for inválido", () => {
     expect(
       () => new User("id-fake", "J", "joao@email.com", "hash-fake"),
-    ).toThrow(AppError);
+    ).toThrow(Error);
   });
 
   it("deve lançar AppError se o email for inválido", () => {
     expect(
       () => new User("id-fake", "João Silva", "email-invalido", "hash-fake"),
-    ).toThrow(AppError);
+    ).toThrow(Error);
   });
 });

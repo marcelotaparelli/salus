@@ -1,5 +1,3 @@
-import { AppError } from "@shared/errors/app-error";
-
 export class User {
   constructor(
     public readonly id: string,
@@ -14,11 +12,11 @@ export class User {
 
   private validate(): void {
     if (!this.name || this.name.length < 2) {
-      throw new AppError("Nome inválido");
+      throw new Error("Nome inválido");
     }
 
     if (!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      throw new AppError("Email inválido");
+      throw new Error("Email inválido");
     }
   }
 }

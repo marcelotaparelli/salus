@@ -1,9 +1,11 @@
+import { InvalidCpfError } from "@domain/value-objects/errors/invalid-cpf.error";
+
 export class Cpf {
   public readonly value: string;
 
   constructor(cpf: string) {
     const cleaned = cpf.replace(/\D/g, "");
-    if (!Cpf.isValid(cleaned)) throw new Error("CPF inválido");
+    if (!Cpf.isValid(cleaned)) throw new InvalidCpfError();
     this.value = cleaned;
   }
 

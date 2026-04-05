@@ -1,8 +1,8 @@
-import { DomainErrorCategory } from "./domain-error-category.type";
+import { DomainErrorCategory } from "./domain-error-category.enum";
 
 export abstract class DomainError extends Error {
   constructor(
-    public readonly message: string,
+    message: string,
     public readonly category: DomainErrorCategory,
   ) {
     super(message);

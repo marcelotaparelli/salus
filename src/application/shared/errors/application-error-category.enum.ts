@@ -1,0 +1,6 @@
+export enum ApplicationErrorCategory {
+  NOT_FOUND = "NOT_FOUND",
+  CONFLICT = "CONFLICT",
+  UNAUTHORIZED = "UNAUTHORIZED",
+  FORBIDDEN = "FORBIDDEN",
+}

@@ -3,7 +3,6 @@ import { UserRepository } from "@domain/user/repositories/user.repository";
 import { InMemoryUserRepository } from "../../infrastructure/database/in-memory/user/user.repository";
 import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { FakePasswordHasher } from "../../helpers/fake-password-hasher";
-import { AppError } from "@shared/errors/app-error";
 import { User } from "@domain/user/entities/user.entity";
 import { FakeTokenGenerator } from "../../helpers/fake-token-generator";
 
@@ -30,7 +29,7 @@ describe("LoginUserUseCase", () => {
         email: "augustosilva@email.com",
         password: "password",
       }),
-    ).rejects.toThrow(AppError);
+    ).rejects.toThrow(Error);
   });
 
   it("deve retornar erro caso a senha for incorreta", async () => {
@@ -39,7 +38,7 @@ describe("LoginUserUseCase", () => {
         email: "josesilva@email.com",
         password: "wrong-password",
       }),
-    ).rejects.toThrow(AppError);
+    ).rejects.toThrow(Error);
   });
 
   it("deve retornar um token de acesso", async () => {

@@ -1,3 +1,5 @@
+import { InvalidNameError } from "@domain/value-objects/errors/invalid-name.error";
+
 export class Name {
   public readonly value: string;
 
@@ -9,11 +11,10 @@ export class Name {
     const cleanedName = name.trim();
     const totalLength = cleanedName.length;
 
-    if (!cleanedName || totalLength < 3)
-      throw new Error("Nome deve ter pelo menos 3 caracteres");
+    if (!cleanedName || totalLength < 3) throw new InvalidNameError();
 
     if (totalLength > 150) {
-      throw new Error("Nome não pode exceder 150 caracteres");
+      throw new InvalidNameError();
     }
 
     return name;

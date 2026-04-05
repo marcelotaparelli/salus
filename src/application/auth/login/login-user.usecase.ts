@@ -1,7 +1,6 @@
 import { UserRepository } from "@domain/user/repositories/user.repository";
 import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { TokenGenerator } from "@domain/auth/services/token-generator";
-import { AppError } from "@shared/errors/app-error";
 
 export class LoginUserUseCase {
   constructor(
@@ -17,7 +16,7 @@ export class LoginUserUseCase {
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (!userExists) {
-      throw new AppError("Usuário ou senha inválidos", 401);
+      throw new Error("Usuário ou senha inválidos");
     }
 
     const hashedPassword = userExists.passwordHash;
@@ -27,7 +26,7 @@ export class LoginUserUseCase {
     );
 
     if (!isValidPassword) {
-      throw new AppError("Usuario ou senha inválidos", 401);
+      throw new Error("Usuario ou senha inválidos");
     }
 
     return {

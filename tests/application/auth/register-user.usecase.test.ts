@@ -1,6 +1,5 @@
 import { UserRepository } from "@domain/user/repositories/user.repository";
 import { InMemoryUserRepository } from "../../infrastructure/database/in-memory/user/user.repository";
-import { AppError } from "@shared/errors/app-error";
 import { RegisterUserUseCase } from "@application/auth/register/register-user.usecase";
 import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { FakePasswordHasher } from "../../helpers/fake-password-hasher";
@@ -41,7 +40,7 @@ describe("RegisterUserUseCase", () => {
         email: "joaosilva@email.com",
         password: "password",
       }),
-    ).rejects.toThrow(AppError);
+    ).rejects.toThrow(Error);
   });
 
   it("deve lançar AppError se nome for inválido", async () => {
@@ -51,7 +50,7 @@ describe("RegisterUserUseCase", () => {
         email: "joaosilva@email.com",
         password: "password",
       }),
-    ).rejects.toThrow(AppError);
+    ).rejects.toThrow(Error);
   });
 
   it("deve lançar AppEror se email for inválido", async () => {
@@ -61,6 +60,6 @@ describe("RegisterUserUseCase", () => {
         email: "joaosilvaemail.com",
         password: "password",
       }),
-    ).rejects.toThrow(AppError);
+    ).rejects.toThrow(Error);
   });
 });

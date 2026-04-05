@@ -1,3 +1,5 @@
+import { InvalidBirthDateError } from "@domain/value-objects/errors/invalid-birth-date.error";
+
 export class BirthDate {
   public readonly value: Date;
 
@@ -7,14 +9,13 @@ export class BirthDate {
 
   private static validate(date: Date): Date {
     if (!(date instanceof Date) || isNaN(date.getTime()))
-      throw new Error("Data inválida");
+      throw new InvalidBirthDateError();
 
     const today = new Date();
 
-    if (date > today) throw new Error("Data de nascimento não pode ser futura");
+    if (date > today) throw new InvalidBirthDateError();
 
-    if (date.getFullYear() < 1900)
-      throw new Error("Data de nascimento muito antiga");
+    if (date.getFullYear() < 1900) throw new InvalidBirthDateError();
 
     return date;
   }
@@ -28,6 +29,6 @@ export class BirthDate {
   }
 
   public toDate(): Date {
-    return this.value;
+    return new Date(this.value);
   }
 }
