@@ -1,6 +1,7 @@
 import { Name, Cpf, Phone, BirthDate } from "@domain/value-objects";
 import { PatientProps, CreatePatientInput } from "@domain/patient/types";
 import { PatientMissingRequiredInformationError } from "@domain/patient/errors/patient-missing-required-information.error";
+import { UpdatePatientInput } from "@domain/patient/types/update-patient-input.type";
 
 export class Patient {
   private constructor(private props: PatientProps) {}
@@ -28,6 +29,17 @@ export class Patient {
 
   public static reconstitute(props: PatientProps): Patient {
     return new Patient(props);
+  }
+
+  public update(props: UpdatePatientInput): Patient {
+    return new Patient({
+      id: this.props.id,
+      name: new Name(props.name),
+      cpf: this.props.cpf,
+      phone: new Phone(props.phone),
+      birthDate: new BirthDate(new Date(props.birthDate)),
+      createdAt: this.props.createdAt,
+    });
   }
 
   get id() {

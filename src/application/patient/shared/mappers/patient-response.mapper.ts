@@ -8,8 +8,8 @@ export class PatientMapper {
       name: patient.name.value,
       cpf: patient.cpf.format(),
       phone: patient.phone.format(),
-      birthDate: patient.birthDate.value,
-      createdAt: patient.createdAt,
+      birthDate: patient.birthDate.value.toISOString(),
+      createdAt: patient.createdAt.toISOString(),
     };
   }
 }

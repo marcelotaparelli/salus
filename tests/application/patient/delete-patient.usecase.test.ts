@@ -1,6 +1,7 @@
 import { InMemoryPatientRepository } from "../../infrastructure/database/in-memory/patient/patient.repository";
 import { Patient } from "@domain/patient/entities/patient.entity";
 import { DeletePatientUseCase } from "@application/patient/delete/delete-patient.usecase";
+import { PatientNotFoundError } from "@application/patient/shared/errors/patient-not-found.error";
 
 describe("DeletePatientUseCase", () => {
   let repo: InMemoryPatientRepository;
@@ -19,15 +20,15 @@ describe("DeletePatientUseCase", () => {
     await repo.save(patient);
   });
 
-  it("Deve deletar um paciente", async () => {
+  it("Must delete a patient", async () => {
     await deleteUseCase.execute(patient.id);
     const result = await repo.findById(patient.id);
     expect(result).toBeNull();
   });
 
-  it("Deve retornar erro quando paciente não existir", async () => {
+  it("Must return PatientNotFound when non existing patient", async () => {
     await expect(deleteUseCase.execute("id-inexistente")).rejects.toThrow(
-      "Paciente não encontrado",
+      PatientNotFoundError,
     );
   });
 });

@@ -1,14 +1,25 @@
-import { Patient } from "@domain/patient/entities/patient.entity";
 import { PatientRepository } from "@domain/patient/repositories/patient.repository";
+import { UpdatePatientDTO } from "@application/patient/update/update-patient.dto";
+import { PatientNotFoundError } from "@application/patient/shared/errors/patient-not-found.error";
+import { PatientResponseDTO } from "@application/patient/shared/dtos/patient-response.dto";
+import { PatientMapper } from "@application/patient/shared/mappers/patient-response.mapper";
 
 export class UpdatePatientUseCase {
   constructor(private patientRepository: PatientRepository) {}
 
-  async execute(patient: Patient): Promise<void> {
-    const foundPatient = await this.patientRepository.findById(patient.id);
+  async execute(clientData: UpdatePatientDTO): Promise<PatientResponseDTO> {
+    const foundPatient = await this.patientRepository.findById(clientData.id);
 
-    if (!foundPatient) throw new Error("Paciente não encontrado");
+    if (!foundPatient) throw new PatientNotFoundError();
 
-    await this.patientRepository.update(patient);
+    const updatedPatient = foundPatient.update({
+      name: clientData.name,
+      phone: clientData.phone,
+      birthDate: clientData.birthDate,
+    });
+
+    await this.patientRepository.update(updatedPatient);
+
+    return PatientMapper.toResponse(updatedPatient);
   }
 }

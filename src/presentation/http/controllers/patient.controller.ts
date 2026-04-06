@@ -1,10 +1,5 @@
 import { makePatientUseCases } from "@infra/factories/patient.factory";
 import { Request, Response, NextFunction } from "express";
-import { Patient } from "@domain/patient/entities/patient.entity";
-import { BirthDate } from "@domain/value-objects/birth-date.vo";
-import { Name } from "@domain/value-objects/name.vo";
-import { Cpf } from "@domain/value-objects/cpf.vo";
-import { Phone } from "@domain/value-objects/phone.vo";
 
 export class PatientController {
   constructor(private useCases: ReturnType<typeof makePatientUseCases>) {}
@@ -19,7 +14,6 @@ export class PatientController {
       });
       res.status(201).json(response);
     } catch (error) {
-      console.error("Erro em PatientController.create:", error);
       next(error);
     }
   }
@@ -29,7 +23,6 @@ export class PatientController {
       const response = await this.useCases.listUseCase.execute();
       res.status(200).json(response);
     } catch (error) {
-      console.error("Erro em PatientController.getAll:", error);
       next(error);
     }
   }
@@ -38,39 +31,25 @@ export class PatientController {
     try {
       const id = req.params["id"] as string;
       const response = await this.useCases.getUseCase.execute(id);
-      if (!response)
-        return res.status(404).json({ message: "Paciente não encontrado" });
       res.status(200).json(response);
     } catch (error) {
-      console.error("Erro em PatientController.getById:", error);
       next(error);
     }
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = req.params["id"] as string;
-
-      const existing = await this.useCases.getUseCase.execute(id);
-      if (!existing)
-        return res.status(404).json({ message: "Paciente não encontrado" });
-
-      const updatedPatient = Patient.reconstitute({
-        id: id,
-        name: new Name(req.body.name),
-        cpf: new Cpf(existing.cpf),
-        phone: new Phone(req.body.phone),
-        birthDate: new BirthDate(new Date(req.body.birthDate)),
-        createdAt: new Date(existing.createdAt),
-      });
+      const updatedPatient = {
+        id: req.params["id"] as string,
+        name: req.body.name,
+        phone: req.body.phone,
+        birthDate: req.body.birthDate,
+      };
 
       const response =
         await this.useCases.updateUseCase.execute(updatedPatient);
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof Error && error.message === "Paciente não encontrado")
-        return res.status(404).json({ message: error.message });
-      console.error("Erro em PatientController.update:", error);
       next(error);
     }
   }
@@ -81,9 +60,6 @@ export class PatientController {
       await this.useCases.deleteUseCase.execute(id);
       res.status(200).json({ message: "Paciente removido com sucesso" });
     } catch (error) {
-      if (error instanceof Error && error.message === "Paciente não encontrado")
-        return res.status(404).json({ message: error.message }); // return, not throw
-      console.error("Erro em PatientController.delete:", error);
       next(error);
     }
   }

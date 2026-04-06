@@ -3,6 +3,6 @@ export interface PatientResponseDTO {
   name: string;
   cpf: string;
   phone: string;
-  birthDate: Date;
-  createdAt: Date;
+  birthDate: string;
+  createdAt: string;
 }

@@ -110,7 +110,7 @@ describe("Patient Routes", () => {
     expect(response.status).toBe(200);
   });
 
-  it("DELETE /patients/:id deve retornar 404 para id inexistente", async () => {
+  it("DELETE /patients/:id must return 404 status code if non existing id", async () => {
     const response = await request(app)
       .delete("/patients/id-inexistente")
       .set("Authorization", "Bearer " + token);

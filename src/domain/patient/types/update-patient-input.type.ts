@@ -1,6 +1,5 @@
-export type UpdatePatientDTO = {
-  id: string;
+export interface UpdatePatientInput {
   name: string;
   phone: string;
   birthDate: string;
-};
+}
