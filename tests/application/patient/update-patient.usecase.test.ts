@@ -20,7 +20,7 @@ describe("UpdatePatientUseCase", () => {
     await repo.save(patient);
   });
 
-  it("Must update an existing patient", async () => {
+  it("should update an existing patient", async () => {
     const updatedData = {
       id: patient.id,
       name: "Marcelo Silva",
@@ -32,7 +32,7 @@ describe("UpdatePatientUseCase", () => {
     expect(result?.name.value).toBe("Marcelo Silva");
   });
 
-  it("Must throw PatientNotFound when trying to update a non existing patient", async () => {
+  it("should throw PatientNotFound when trying to update a non existing patient", async () => {
     const ghost = {
       id: "123",
       name: "Fantasma",

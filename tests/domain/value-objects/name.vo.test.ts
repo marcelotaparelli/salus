@@ -8,27 +8,27 @@ describe("Name value object", () => {
     name = new Name("Marcelo Taparelli");
   });
 
-  it("Deve retornar erro de validação caso o nome seja vazio", () => {
+  it("should throw validation error if name is empty", () => {
     expect(() => new Name("")).toThrow(InvalidNameError);
   });
 
-  it("Deve retornar erro de validação caso o nome seja menor que 3", () => {
+  it("should throw validation error if name is shorter than 3 characters", () => {
     expect(() => new Name("Ma")).toThrow(InvalidNameError);
   });
 
-  it("Deve retornar erro de validação caso o nome seja maior que 150", () => {
+  it("should throw validation error if name is longer than 150 characters", () => {
     expect(() => new Name("a".repeat(151))).toThrow(InvalidNameError);
   });
 
-  it("Deve validar nomes corretos", () => {
+  it("should validate correct names", () => {
     expect(name.value).toBe("Marcelo Taparelli");
   });
 
-  it("Deve retornar o primeiro nome", () => {
+  it("should return the first name", () => {
     expect(name.getFirstName()).toBe("Marcelo");
   });
 
-  it("Deve retornar o segundo nome", () => {
+  it("should return the last name", () => {
     expect(name.getLastName()).toBe("Taparelli");
   });
 });

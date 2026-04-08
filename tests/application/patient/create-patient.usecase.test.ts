@@ -1,6 +1,8 @@
 import { CreatePatientUseCase } from "@application/patient/create/create-patient.usecase";
 import { InMemoryPatientRepository } from "../../infrastructure/database/in-memory/patient/patient.repository";
 import { Patient } from "@domain/patient/entities/patient.entity";
+import { InvalidCpfError } from "@domain/value-objects/errors/invalid-cpf.error";
+import { InvalidBirthDateError } from "@domain/value-objects/errors/invalid-birth-date.error";
 
 describe("CreatePatientUseCase", () => {
   let repo: InMemoryPatientRepository;
@@ -20,9 +22,8 @@ describe("CreatePatientUseCase", () => {
 
   it("should create a patient successfully and return an id", async () => {
     const result = await useCase.execute(validInput);
-
     expect(result).toBeDefined();
-    expect(result.id).toEqual(expect.any(String));
+    expect(typeof result.id).toBe("string");
   });
 
   it("should persist the patient in the repository", async () => {
@@ -59,7 +60,9 @@ describe("CreatePatientUseCase", () => {
       cpf: "111.111.111-11",
     };
 
-    await expect(useCase.execute(invalidInput)).rejects.toThrow();
+    await expect(useCase.execute(invalidInput)).rejects.toThrow(
+      InvalidCpfError,
+    );
   });
 
   it("should throw an error when trying to create a patient with a future birth date", async () => {
@@ -68,6 +71,8 @@ describe("CreatePatientUseCase", () => {
       birthDate: new Date(Date.now() + 1000 * 60 * 60),
     };
 
-    await expect(useCase.execute(invalidInput)).rejects.toThrow();
+    await expect(useCase.execute(invalidInput)).rejects.toThrow(
+      InvalidBirthDateError,
+    );
   });
 });

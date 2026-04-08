@@ -20,13 +20,13 @@ describe("DeletePatientUseCase", () => {
     await repo.save(patient);
   });
 
-  it("Must delete a patient", async () => {
+  it("should delete a patient", async () => {
     await deleteUseCase.execute(patient.id);
     const result = await repo.findById(patient.id);
     expect(result).toBeNull();
   });
 
-  it("Must return PatientNotFound when non existing patient", async () => {
+  it("should return PatientNotFound when non existing patient", async () => {
     await expect(deleteUseCase.execute("id-inexistente")).rejects.toThrow(
       PatientNotFoundError,
     );

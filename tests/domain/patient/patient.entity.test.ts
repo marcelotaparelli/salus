@@ -9,25 +9,25 @@ describe("Patient", () => {
     birthDate: new Date("2000-01-01"),
   };
 
-  it("Must throw error if name is missing", () => {
+  it("should throw error if name is missing", () => {
     expect(() => Patient.create({ ...validPatientData, name: "" })).toThrow(
       PatientMissingRequiredInformationError,
     );
   });
 
-  it("Must throw error if cpf is missing", () => {
+  it("should throw error if cpf is missing", () => {
     expect(() => Patient.create({ ...validPatientData, cpf: "" })).toThrow(
       PatientMissingRequiredInformationError,
     );
   });
 
-  it("Must throw error if phone is missing", () => {
+  it("should throw error if phone is missing", () => {
     expect(() => Patient.create({ ...validPatientData, phone: "" })).toThrow(
       PatientMissingRequiredInformationError,
     );
   });
 
-  it("Must throw error if birthDate is missing", () => {
+  it("should throw error if birthDate is missing", () => {
     expect(() =>
       Patient.create({
         ...validPatientData,
@@ -36,7 +36,7 @@ describe("Patient", () => {
     ).toThrow(PatientMissingRequiredInformationError);
   });
 
-  it("Must create a patient with valid data", () => {
+  it("should create a patient with valid data", () => {
     const patient = Patient.create(validPatientData);
 
     expect(patient.id).toBeDefined();

@@ -27,7 +27,7 @@ describe("LoginUserUseCase", () => {
     );
   });
 
-  it("deve retornar erro caso o email não exista", async () => {
+  it("should throw an error if email doesn't exist", async () => {
     await expect(
       loginUseCase.execute({
         email: "augustosilva@email.com",
@@ -36,7 +36,7 @@ describe("LoginUserUseCase", () => {
     ).rejects.toThrow(Error);
   });
 
-  it("deve retornar erro caso a senha for incorreta", async () => {
+  it("should throw an error if password is wrong", async () => {
     await expect(
       loginUseCase.execute({
         email: "josesilva@email.com",
@@ -45,7 +45,7 @@ describe("LoginUserUseCase", () => {
     ).rejects.toThrow(Error);
   });
 
-  it("deve retornar um token de acesso", async () => {
+  it("should return a valid token", async () => {
     const result = await loginUseCase.execute({
       email: "josesilva@email.com",
       password: "password",

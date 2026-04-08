@@ -19,13 +19,13 @@ describe("GetPatientUseCase", () => {
     });
   });
 
-  it("Must throw PatientNotFoundError when patient is not found", async () => {
+  it("should throw PatientNotFoundError when patient is not found", async () => {
     await expect(getUseCase.execute(patient.id)).rejects.toThrow(
       PatientNotFoundError,
     );
   });
 
-  it("Must return a patient", async () => {
+  it("should return a patient", async () => {
     await repo.save(patient);
     const result = await getUseCase.execute(patient.id);
 

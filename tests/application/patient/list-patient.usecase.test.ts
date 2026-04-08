@@ -13,7 +13,7 @@ describe("ListPatientsUseCase", () => {
     createUseCase = new CreatePatientUseCase(repo);
   });
 
-  it("Deve listar todos os pacientes", async () => {
+  it("should list all patients", async () => {
     await createUseCase.execute({
       name: "João Silva",
       cpf: "529.982.247-25",
@@ -28,7 +28,7 @@ describe("ListPatientsUseCase", () => {
     expect(first.cpf).toBe("529.982.247-25");
   });
 
-  it("Deve retornar um array vazio caso não existir registros", async () => {
+  it("should return an empty array", async () => {
     const patientList = await listUseCase.execute();
     expect(patientList).toEqual([]);
   });

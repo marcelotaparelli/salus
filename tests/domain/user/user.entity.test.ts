@@ -8,7 +8,7 @@ describe("User Entity", () => {
     passwordHash: "hash_simulado",
   };
 
-  it("Must throw UserMissingRequiredInformationError when name is empty", () => {
+  it("should throw UserMissingRequiredInformationError when name is empty", () => {
     const input = {
       name: "",
       email: "teste@teste.com",
@@ -20,7 +20,7 @@ describe("User Entity", () => {
     );
   });
 
-  it("Must throw UserMissingRequiredInformationError when email is empty", () => {
+  it("should throw UserMissingRequiredInformationError when email is empty", () => {
     const input = {
       name: "Marcelo",
       email: "",
@@ -32,7 +32,7 @@ describe("User Entity", () => {
     );
   });
 
-  it("Must throw UserMissingRequiredInformationError when passwordHash is empty", () => {
+  it("should throw UserMissingRequiredInformationError when passwordHash is empty", () => {
     const input = {
       name: "Marcelo",
       email: "teste@teste.com",
@@ -44,7 +44,7 @@ describe("User Entity", () => {
     );
   });
 
-  it("Must create a User", () => {
+  it("should create a User", () => {
     const user = User.create(validUserData);
 
     expect(user.id).toBeDefined();
