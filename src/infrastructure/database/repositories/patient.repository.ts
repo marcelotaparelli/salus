@@ -23,6 +23,14 @@ export class PrismaPatientRepository implements PatientRepository {
     return PatientPersistenceMapper.toDomain(result);
   }
 
+  async findByCpf(cpf: string): Promise<Patient | null> {
+    const result = await prisma.patient.findUnique({
+      where: { cpf: cpf },
+    });
+    if (!result) return null;
+    return PatientPersistenceMapper.toDomain(result);
+  }
+
   async update(patient: Patient): Promise<void> {
     const toPersistencePatient =
       PatientPersistenceMapper.toPersistence(patient);

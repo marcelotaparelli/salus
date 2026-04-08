@@ -3,6 +3,7 @@ import { InMemoryPatientRepository } from "../../infrastructure/database/in-memo
 import { Patient } from "@domain/patient/entities/patient.entity";
 import { InvalidCpfError } from "@domain/value-objects/errors/invalid-cpf.error";
 import { InvalidBirthDateError } from "@domain/value-objects/errors/invalid-birth-date.error";
+import { PatientConflictError } from "@application/patient/shared/errors/patient-conflict.error";
 
 describe("CreatePatientUseCase", () => {
   let repo: InMemoryPatientRepository;
@@ -73,6 +74,13 @@ describe("CreatePatientUseCase", () => {
 
     await expect(useCase.execute(invalidInput)).rejects.toThrow(
       InvalidBirthDateError,
+    );
+  });
+
+  it("should throw PatientConflictError if patient already exists", async () => {
+    await useCase.execute(validInput);
+    await expect(useCase.execute(validInput)).rejects.toThrow(
+      PatientConflictError,
     );
   });
 });

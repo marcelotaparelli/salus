@@ -42,6 +42,11 @@ export class InMemoryPatientRepository implements PatientRepository {
     return p ? this.toDomain(p) : null;
   }
 
+  public async findByCpf(cpf: string): Promise<Patient | null> {
+    const p = this.repo.find((p) => (p.cpf = cpf));
+    return p ? this.toDomain(p) : null;
+  }
+
   public async update(patient: Patient): Promise<void> {
     const index = this.repo.findIndex((p) => p.id === patient.id);
     if (index === -1) throw new Error("Paciente não encontrado");
