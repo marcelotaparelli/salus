@@ -1,13 +1,43 @@
 import { Patient } from "@domain/patient/entities/patient.entity";
+import { PatientMissingRequiredInformationError } from "@domain/patient/errors/patient-missing-required-information.error";
 
 describe("Patient", () => {
-  it("Deve criar um paciente com os dados corretos", () => {
-    const patient = Patient.create({
-      name: "João Silva",
-      cpf: "933.444.130-58",
-      phone: "(11) 99999-9999",
-      birthDate: new Date("2000-01-01"),
-    });
+  const validPatientData = {
+    name: "João Silva",
+    cpf: "933.444.130-58",
+    phone: "(11) 99999-9999",
+    birthDate: new Date("2000-01-01"),
+  };
+
+  it("Must throw error if name is missing", () => {
+    expect(() => Patient.create({ ...validPatientData, name: "" })).toThrow(
+      PatientMissingRequiredInformationError,
+    );
+  });
+
+  it("Must throw error if cpf is missing", () => {
+    expect(() => Patient.create({ ...validPatientData, cpf: "" })).toThrow(
+      PatientMissingRequiredInformationError,
+    );
+  });
+
+  it("Must throw error if phone is missing", () => {
+    expect(() => Patient.create({ ...validPatientData, phone: "" })).toThrow(
+      PatientMissingRequiredInformationError,
+    );
+  });
+
+  it("Must throw error if birthDate is missing", () => {
+    expect(() =>
+      Patient.create({
+        ...validPatientData,
+        birthDate: undefined as unknown as Date,
+      }),
+    ).toThrow(PatientMissingRequiredInformationError);
+  });
+
+  it("Must create a patient with valid data", () => {
+    const patient = Patient.create(validPatientData);
 
     expect(patient.id).toBeDefined();
     expect(patient.name.value).toBe("João Silva");

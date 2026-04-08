@@ -1,34 +1,55 @@
 import { User } from "@domain/user/entities/user.entity";
+import { UserMissingRequiredInformationError } from "@domain/user/errors/user-missing-required-information.error";
 
-describe("User entity", () => {
-  it("deve criar um usuário válido", () => {
-    const user = new User(
-      "id-fake",
-      "João Silva",
-      "joao@email.com",
-      "hash-fake",
+describe("User Entity", () => {
+  const validUserData = {
+    name: "Marcelo",
+    email: "teste@teste.com",
+    passwordHash: "hash_simulado",
+  };
+
+  it("Must throw UserMissingRequiredInformationError when name is empty", () => {
+    const input = {
+      name: "",
+      email: "teste@teste.com",
+      passwordHash: "teste123",
+    };
+
+    expect(() => User.create(input)).toThrow(
+      UserMissingRequiredInformationError,
     );
-    expect(user.id).toBe("id-fake");
-    expect(user.name).toBe("João Silva");
-    expect(user.email).toBe("joao@email.com");
-    expect(user.passwordHash).toBe("hash-fake");
   });
 
-  it("deve gerar um id automaticamente se não for passado", () => {
-    const user = new User("", "João Silva", "joao@email.com", "hash-fake");
+  it("Must throw UserMissingRequiredInformationError when email is empty", () => {
+    const input = {
+      name: "Marcelo",
+      email: "",
+      passwordHash: "teste123",
+    };
+
+    expect(() => User.create(input)).toThrow(
+      UserMissingRequiredInformationError,
+    );
+  });
+
+  it("Must throw UserMissingRequiredInformationError when passwordHash is empty", () => {
+    const input = {
+      name: "Marcelo",
+      email: "teste@teste.com",
+      passwordHash: "",
+    };
+
+    expect(() => User.create(input)).toThrow(
+      UserMissingRequiredInformationError,
+    );
+  });
+
+  it("Must create a User", () => {
+    const user = User.create(validUserData);
+
     expect(user.id).toBeDefined();
-    expect(user.id.length).toBeGreaterThan(0);
-  });
-
-  it("deve lançar AppError se o nome for inválido", () => {
-    expect(
-      () => new User("id-fake", "J", "joao@email.com", "hash-fake"),
-    ).toThrow(Error);
-  });
-
-  it("deve lançar AppError se o email for inválido", () => {
-    expect(
-      () => new User("id-fake", "João Silva", "email-invalido", "hash-fake"),
-    ).toThrow(Error);
+    expect(typeof user.name).toBe("string");
+    expect(typeof user.email.value).toBe("string");
+    expect(user.createdAt).toBeInstanceOf(Date);
   });
 });

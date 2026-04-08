@@ -7,7 +7,11 @@ describe("InMemoryUserRepository", () => {
 
   beforeEach(() => {
     repo = new InMemoryUserRepository();
-    user = new User("123", "João Silva", "joao@email.com", "hash-fake");
+    user = User.create({
+      name: "João Silva",
+      email: "joao@email.com",
+      passwordHash: "hash-fake",
+    });
   });
 
   it("save deve adicionar e encontrar um usuário em memória", async () => {

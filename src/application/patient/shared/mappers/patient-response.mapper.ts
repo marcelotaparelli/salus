@@ -1,7 +1,7 @@
 import { Patient } from "@domain/patient/entities/patient.entity";
 import { PatientResponseDTO } from "@application/patient/shared/dtos/patient-response.dto";
 
-export class PatientMapper {
+export class PatientResponseMapper {
   public static toResponse(patient: Patient): PatientResponseDTO {
     return {
       id: patient.id,

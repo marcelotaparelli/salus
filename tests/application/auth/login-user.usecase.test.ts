@@ -19,7 +19,11 @@ describe("LoginUserUseCase", () => {
     loginUseCase = new LoginUserUseCase(repo, hasher, tokenGenerator);
 
     repo.save(
-      new User("", "José Silva", "josesilva@email.com", "hashed_password"),
+      User.create({
+        name: "José Silva",
+        email: "josesilva@email.com",
+        passwordHash: "hashed_password",
+      }),
     );
   });
 

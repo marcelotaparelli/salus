@@ -10,7 +10,11 @@ describe("JwtTokenGenerator", () => {
 
   beforeEach(async () => {
     await repo.save(
-      new User("", "José Silva", "josesilva@email.com", "hashed_password"),
+      User.create({
+        name: "José Silva",
+        email: "josesilva@email.com",
+        passwordHash: "hashed_password",
+      }),
     );
 
     user = await repo.findByEmail("josesilva@email.com");
@@ -20,13 +24,13 @@ describe("JwtTokenGenerator", () => {
     if (!user) throw new Error("Usuário não encontrado");
     const token = tokenGenerator.generate({
       userId: user.id,
-      email: user.email,
+      email: user.email.value,
     });
     const payload = verify(token, "secret-de-teste-para-ambiente-de-teste") as {
       userId: string;
       email: string;
     };
     expect(payload.userId).toBe(user.id);
-    expect(payload.email).toBe(user.email);
+    expect(payload.email).toBe(user.email.value);
   });
 });

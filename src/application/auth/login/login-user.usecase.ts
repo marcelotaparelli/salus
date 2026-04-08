@@ -32,7 +32,7 @@ export class LoginUserUseCase {
     return {
       token: this.tokenGenerator.generate({
         userId: userExists.id,
-        email: userExists.email,
+        email: userExists.email.value,
       }),
     };
   }

@@ -22,6 +22,10 @@ describe("ListPatientsUseCase", () => {
     });
     const patientList = await listUseCase.execute();
     expect(patientList).toHaveLength(1);
+    const first = patientList[0]!;
+    expect(first).toBeDefined();
+    expect(typeof first.name).toBe("string");
+    expect(first.cpf).toBe("529.982.247-25");
   });
 
   it("Deve retornar um array vazio caso não existir registros", async () => {

@@ -1,12 +1,15 @@
 import { PatientRepository } from "@domain/patient/repositories/patient.repository";
-import { Patient } from "@domain/patient/entities/patient.entity";
+import { PatientResponseDTO } from "@application/patient/shared/dtos/patient-response.dto";
+import { PatientResponseMapper } from "@application/patient/shared/mappers/patient-response.mapper";
 
 export class ListPatientsUseCase {
   constructor(private patientRepository: PatientRepository) {}
 
-  async execute(): Promise<Patient[]> {
+  async execute(): Promise<PatientResponseDTO[]> {
     const patientList = await this.patientRepository.findAll();
-
-    return patientList;
+    const toResponsePatientList = patientList.map(
+      PatientResponseMapper.toResponse,
+    );
+    return toResponsePatientList;
   }
 }

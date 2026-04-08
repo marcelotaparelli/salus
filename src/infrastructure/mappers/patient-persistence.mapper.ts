@@ -13,7 +13,7 @@ export interface RawPatientProps {
   createdAt: Date;
 }
 
-export class PatientMapper {
+export class PatientPersistenceMapper {
   private constructor() {}
 
   public static toDomain(raw: RawPatientProps): Patient {

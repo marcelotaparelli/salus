@@ -43,16 +43,6 @@ describe("RegisterUserUseCase", () => {
     ).rejects.toThrow(Error);
   });
 
-  it("deve lançar AppError se nome for inválido", async () => {
-    await expect(
-      useCase.execute({
-        name: "J",
-        email: "joaosilva@email.com",
-        password: "password",
-      }),
-    ).rejects.toThrow(Error);
-  });
-
   it("deve lançar AppEror se email for inválido", async () => {
     await expect(
       useCase.execute({

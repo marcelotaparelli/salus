@@ -3,7 +3,6 @@ import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { RegisterUserDTO } from "./register-user.dto";
 import { RegisterUserResponseDTO } from "./register-user-response.dto";
 import { User } from "@domain/user/entities/user.entity";
-import { randomUUID } from "crypto";
 
 export class RegisterUserUseCase {
   constructor(
@@ -20,19 +19,18 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await this.hasher.hash(user.password);
 
-    const newUser = new User(
-      randomUUID(),
-      user.name,
-      user.email,
-      hashedPassword,
-    );
+    const newUser = User.create({
+      name: user.name,
+      email: user.email,
+      passwordHash: hashedPassword,
+    });
 
     await this.userRepository.save(newUser);
 
     return {
       id: newUser.id,
       name: newUser.name,
-      email: newUser.email,
+      email: newUser.email.value,
     };
   }
 }

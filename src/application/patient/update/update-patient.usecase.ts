@@ -2,7 +2,7 @@ import { PatientRepository } from "@domain/patient/repositories/patient.reposito
 import { UpdatePatientDTO } from "@application/patient/update/update-patient.dto";
 import { PatientNotFoundError } from "@application/patient/shared/errors/patient-not-found.error";
 import { PatientResponseDTO } from "@application/patient/shared/dtos/patient-response.dto";
-import { PatientMapper } from "@application/patient/shared/mappers/patient-response.mapper";
+import { PatientResponseMapper } from "@application/patient/shared/mappers/patient-response.mapper";
 
 export class UpdatePatientUseCase {
   constructor(private patientRepository: PatientRepository) {}
@@ -20,6 +20,6 @@ export class UpdatePatientUseCase {
 
     await this.patientRepository.update(updatedPatient);
 
-    return PatientMapper.toResponse(updatedPatient);
+    return PatientResponseMapper.toResponse(updatedPatient);
   }
 }
