@@ -5,6 +5,7 @@ import { PasswordHasher } from "@domain/auth/services/password-hasher";
 import { FakePasswordHasher } from "../../helpers/fake-password-hasher";
 import { User } from "@domain/user/entities/user.entity";
 import { FakeTokenGenerator } from "../../helpers/fake-token-generator";
+import { InvalidLoginError } from "@application/auth/errors/invalid-login.error";
 
 describe("LoginUserUseCase", () => {
   let loginUseCase: LoginUserUseCase;
@@ -33,7 +34,7 @@ describe("LoginUserUseCase", () => {
         email: "augustosilva@email.com",
         password: "password",
       }),
-    ).rejects.toThrow(Error);
+    ).rejects.toThrow(InvalidLoginError);
   });
 
   it("should throw an error if password is wrong", async () => {
@@ -42,7 +43,7 @@ describe("LoginUserUseCase", () => {
         email: "josesilva@email.com",
         password: "wrong-password",
       }),
-    ).rejects.toThrow(Error);
+    ).rejects.toThrow(InvalidLoginError);
   });
 
   it("should return a valid token", async () => {
